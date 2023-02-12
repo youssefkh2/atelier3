@@ -1,0 +1,43 @@
+ {% if (list is not defined) or (list is empty)  %}
+    {{ "liste vide ou indefinie!!" }}
+   {% else %}
+
+{% for i in list %}
+     <h5>Reference:  {{i.ref}}   </h5><br>
+     <h5> Titre: {{i.Titre|upper}} </h5><br>
+   <h5> Description: {{ i.Description }}</h5><br>
+   <h5> Date de début: {{i.date_debut }}</h5><br>
+   <h5> Date de fin:  {{i.date_fin }}</h5><br>
+   <h5> Nombre de participants:{{ i.nb_participants }}</h5><br>
+   {% if i.nb_participants == 0 %}
+          <form method="post" action="{{ path('get_name',{'name':i.Titre})}}">
+            <button type="submit">Participer</button>
+          </form>
+    {% endif %}
+   {% endfor %}
+ <h3>Nombre de formation  :{{list|length}}</h3>
+  <h3>titre de formation théoriques  :</h3>
+   {% for i in list %}
+{% if i.Description ends with 'theorique' %}
+<h6> {{ i.Titre }} </h6>
+{% endif %}
+{% endfor %}
+ 
+
+ {% set maxP=0 %}
+{% set titre="" %}
+ {% for i in list %}
+ {% if i.nb_participants > maxP %}
+ {% set maxP = i.nb_participants %}
+  {% set titre=i.Titre %}
+  {% endif %}
+   {% endfor %}
+
+    {{ "Les formations avec le plus grand nombre de participants: " ~ titre  }} <br>
+       {% set nbTotal=0 %}
+        {% for i in list %}
+        {% set nbTotal =nbTotal+i.nb_participants  %}
+       {% endfor %}
+    {{ "Nombre total de participants: " ~ nbTotal  }} <br>
+
+   {% endif %}
